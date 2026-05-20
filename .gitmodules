@@ -1,0 +1,15 @@
+[submodule "cursor"]
+	path = cursor
+	url = git@github.com:latitude-dev/latitude-cursor.git
+[submodule "claude"]
+	path = claude
+	url = git@github.com:latitude-dev/latitude-claude.git
+[submodule "codex"]
+	path = codex
+	url = git@github.com:latitude-dev/latitude-codex.git
+[submodule "zed"]
+	path = zed
+	url = git@github.com:latitude-dev/latitude-zed.git
+[submodule "antigravity"]
+	path = antigravity
+	url = git@github.com:latitude-dev/latitude-antigravity.git
