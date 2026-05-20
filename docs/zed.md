@@ -54,7 +54,7 @@ edition = "2021"
 crate-type = ["cdylib"]
 
 [dependencies]
-zed_extension_api = "0.1.0"   # Use the latest compatible version on crates.io
+zed_extension_api = "0.7.0"   # Use the latest compatible version on crates.io
 ```
 
 `stdout`/`stderr` from the extension are forwarded to the Zed process. Launch Zed with `zed --foreground` to see `dbg!`/`println!` output.
