@@ -173,6 +173,30 @@ Deeper references for each host's plugin system live under `docs/`: [`docs/curso
 - Latitude API version doesn't need to match — the MCP server URL is stable, so plugins don't need to be re-released when the API ticks.
 - For Claude Code, omitting `version` in `plugin.json` falls back to commit SHA = every commit ships as a new version. Setting an explicit `version` is preferred for controlled releases.
 
+## Validating plugins
+
+`scripts/validate-all.sh` at the monorepo root runs every platform's validator in turn and prints a pass/fail summary. Run it from anywhere; it works out the repo root from its own location.
+
+```bash
+./scripts/validate-all.sh
+```
+
+What each platform's validator does, and how to run it standalone:
+
+| Platform | Validator | Run standalone |
+| --- | --- | --- |
+| Cursor | JSON parse + `cursor-agent --plugin-dir <dir>` smoke-load. Cursor ships **no** `validate` subcommand. | `cursor-agent --plugin-dir cursor --trust -p ok --mode ask` |
+| Claude Code | `claude plugin validate` — ships with the `claude` CLI. Strict; rejects unknown manifest keys. | `claude plugin validate claude` |
+| Codex | Python script `validate_plugin.py` from `openai/codex` (vendored on first run into `.cache/`). Enforces required `interface.*` fields, hex `brandColor`, `mcpServers` keying, etc. | `python3 .cache/codex-validate_plugin.py codex` |
+| Zed | `cargo build --target wasm32-wasip2 --release` (compile = validation) + ID/name rules ported from `zed-industries/extensions/src/lib/validation.js` + LICENSE-present check. | `cargo build --manifest-path zed/Cargo.toml --target wasm32-wasip2 --release` |
+| Antigravity | JSON parse + structural check that `mcp_config.json` has a `mcpServers` map with `serverUrl` or `command` per server. Antigravity has **no** published CLI validator. | (run `validate-all.sh`) |
+
+### Gotchas
+
+- **Claude `displayName` rejection**: `claude plugin validate` in v2.1.141 reports `Unrecognized key: "displayName"` even though the docs say it was added in v2.1.143. Until 2.1.143 ships, leave `displayName` out of `claude/.claude-plugin/plugin.json`.
+- **Codex first-run cost**: the first invocation downloads `validate_plugin.py` and provisions a `pyyaml` venv under `.cache/`. Subsequent runs are instant. The `.cache/` directory is gitignored.
+- **Zed build target**: `wasm32-wasip2` is the current Zed extension target. Older docs reference `wasm32-wasip1` which also works; `rustup target add wasm32-wasip2` may be needed.
+
 ## Working with submodules
 
 Once each `<platform>/` is its own public repo wired back in as a submodule, normal `git` operations inside a platform folder act on the submodule's repo, not the monorepo. Workflow:

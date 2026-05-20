@@ -35,3 +35,6 @@ Cargo.lock
 
 # Local plugin caches
 .cursor/plugins/local/
+
+# validate-all.sh caches (Codex's validate_plugin.py + its pyyaml venv)
+.cache/

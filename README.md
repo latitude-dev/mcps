@@ -68,6 +68,16 @@ After install, the user is taken through the host's standard MCP authorization f
 | Zed | `zed/extension.toml` + Rust crate | `context_server_command` in `src/lib.rs` | PR to [`zed-industries/extensions`](https://github.com/zed-industries/extensions) |
 | Antigravity | `antigravity/plugin.json` | `antigravity/mcp_config.json` | Manual install (no public submission flow yet) |
 
+## Validating
+
+A single command validates all five plugins:
+
+```bash
+./scripts/validate-all.sh
+```
+
+Under the hood it runs `claude plugin validate`, Codex's `validate_plugin.py`, `cargo build` for the Zed extension, and a `cursor-agent --plugin-dir` smoke-load for Cursor. See [`AGENTS.md`](./AGENTS.md#validating-plugins) for the per-platform details.
+
 ## Docs
 
 - [`docs/plan.md`](./docs/plan.md) — implementation & submission plan
