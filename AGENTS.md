@@ -196,6 +196,8 @@ What each platform's validator does, and how to run it standalone:
 - **Claude `displayName` rejection**: `claude plugin validate` in v2.1.141 reports `Unrecognized key: "displayName"` even though the docs say it was added in v2.1.143. Until 2.1.143 ships, leave `displayName` out of `claude/.claude-plugin/plugin.json`.
 - **Codex first-run cost**: the first invocation downloads `validate_plugin.py` and provisions a `pyyaml` venv under `.cache/`. Subsequent runs are instant. The `.cache/` directory is gitignored.
 - **Zed build target**: `wasm32-wasip2` is the current Zed extension target. Older docs reference `wasm32-wasip1` which also works; `rustup target add wasm32-wasip2` may be needed.
+- **Cursor local installs don't follow symlinks**: Cursor's plugin docs suggest `ln -s … ~/.cursor/plugins/local/<name>`, but stable Cursor (≥ 3.4.20 tested) silently skips symlinks. Use `cp -R` and re-copy when iterating.
+- **Cursor local installs don't render `logo` / `description`**: Cursor resolves the manifest's relative `logo` path to a `raw.githubusercontent.com` URL using the marketplace's repo+SHA record, which doesn't exist for local installs. Description and icon both surface only after marketplace publishing. Don't chase this during local testing — it's expected.
 
 ## Working with submodules
 
